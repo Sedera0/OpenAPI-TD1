@@ -1,21 +1,23 @@
+openapi: 3.0.0
 info:
-  nom: STD23085 - TD1
+  title: STD23085 - TD1
   version: 1.0.0
 
-server:
-  URL: https://localhost.STD23085.com
+servers:
+  - url: https://localhost.STD23085.com
 
-path:
+paths:
   /customers:
     get:
-      response:
-        200:
+      responses:
+        '200':
+          description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Customer"
+                  $ref: '#/components/schemas/Customer'
 
 components:
   schemas:

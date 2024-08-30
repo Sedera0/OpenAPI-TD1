@@ -3,7 +3,7 @@ info:
   title: STD23085 - TD2 Meals
   version: '1.0.3'
 servers:
-  - url: https://localhost.std230xxx.com
+  - url: https://localhost.std23085.com
 paths:
   /meals:
     get:

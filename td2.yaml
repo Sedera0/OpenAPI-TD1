@@ -3,7 +3,7 @@ info:
   title: STD23085 - TD2
   version: '1.0.2'
 servers:
-  - url: https://localhost.std230xxx.com
+  - url: https://localhost.std23085.com
 paths:
   /customers:
     get:

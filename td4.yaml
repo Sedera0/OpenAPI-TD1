@@ -1,0 +1,278 @@
+openapi: 3.0.3
+info:
+  title: STD23085 - TD2 Meals and Customers
+  version: '1.0.4'
+servers:
+  - url: https://localhost.std23085.com
+paths:
+  /customers:
+    get:
+      summary: Retrieve a list of customers
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: The page number for pagination.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+          description: The number of items per page.
+      responses:
+        200:
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+    post:
+      summary: Create new customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateCustomer'
+        required: true
+      responses:
+        200:
+          description: List of created customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+    put:
+      summary: Update existing customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Customer'
+        required: true
+      responses:
+        200:
+          description: List of updated customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+  /meals:
+    get:
+      summary: Retrieve a list of meals
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: The page number for pagination.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: true
+          description: The number of items per page.
+      responses:
+        200:
+          description: List of meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+    post:
+      summary: Create a new meal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateMeal'
+        required: true
+        description: An array of meal objects to create.
+      responses:
+        200:
+          description: List of created meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+    put:
+      summary: Update existing meals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Meal'
+        required: true
+        description: An array of meal objects to update.
+      responses:
+        200:
+          description: List of updated meals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+  /customers/{customerId}/orders:
+    get:
+      summary: Retrieve a list of orders for a specific customer
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+          description: The ID of the customer
+      responses:
+        200:
+          description: List of orders for the customer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      summary: Create a new order for a specific customer
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+          description: The ID of the customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+        required: true
+        description: The order object to create.
+      responses:
+        200:
+          description: The created order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+    put:
+      summary: Update an existing order for a specific customer
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          schema:
+            type: string
+          description: The ID of the customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+        description: The order object to update.
+      responses:
+        200:
+          description: The updated order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+components:
+  schemas:
+    Customer:
+      allOf:
+        - $ref: '#/components/schemas/CustomerIdentifier'
+        - $ref: '#/components/schemas/CreateCustomer'
+    CustomerIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+    CreateCustomer:
+      type: object
+      properties:
+        name:
+          type: string
+        age:
+          type: integer
+    Meal:
+      allOf:
+        - $ref: '#/components/schemas/MealIdentifier'
+        - $ref: '#/components/schemas/CreateMeal'
+    MealIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the meal.
+    CreateMeal:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the meal.
+        price:
+          type: number
+          format: float
+          description: The price of the meal.
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the order.
+        reference:
+          type: string
+          description: The unique reference number of the order.
+        meals:
+          type: array
+          items:
+            type: object
+            properties:
+              meal:
+                $ref: '#/components/schemas/Meal'
+              quantity:
+                type: integer
+                description: The quantity of the meal in the order.
+        orderDatetime:
+          type: string
+          format: date-time
+          description: The date and time when the order was made.
+    CreateOrder:
+      type: object
+      properties:
+        reference:
+          type: string
+          description: The unique reference number of the order.
+        meals:
+          type: array
+          items:
+            type: object
+            properties:
+              mealId:
+                type: string
+                description: The unique identifier of the meal.
+              quantity:
+                type: integer
+                description: The quantity of the meal in the order.

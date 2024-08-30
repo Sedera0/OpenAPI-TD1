@@ -1,1 +1,28 @@
+/customers/{customerId}:
+  patch:
+    summary: Partially update a customer
+    parameters:
+      - in: path
+        name: customerId
+        required: true
+        schema:
+          type: string
+        description: The ID of the customer to update
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              age:
+                type: integer
+    responses:
+      200:
+        description: The updated customer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
 
